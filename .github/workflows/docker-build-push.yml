@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Test docker hub annotate and build
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
         $versionSplit = $version.Split(".")
         $versionToCompare = "$($versionSplit[0]).$($versionSplit[1]).$($versionSplit[2])"
 
-        $workerToolsTags = Invoke-RestMethod "https://registry.hub.docker.com/v2/repositories/octopuslabs/workertools/tags?page_size=50"
+        $workerToolsTags = Invoke-RestMethod "https://registry.hub.docker.com/v2/repositories/harrisonmeister/octolabs-workertools/tags?page_size=50"
         $matchingTag = $workerToolsTags.results | Where-Object { $_.name -eq $versionToCompare }
 
         echo "VERSION=$versionToCompare" >> $env:GITHUB_OUTPUT
@@ -77,37 +77,37 @@ jobs:
     - name: Build the ubuntu-20.04 Docker image 
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker build ./ubuntu-2004 --tag octopuslabs/workertools:$VERSION_NUMBER-ubuntu.2004 --tag octopuslabs/workertools:latest-ubuntu.2004
+      run: docker build ./ubuntu-2004 --tag harrisonmeister/octolabs-workertools:$VERSION_NUMBER-ubuntu.2004 --tag harrisonmeister/octolabs-workertools:latest-ubuntu.2004
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the ubuntu-20.04 version image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:$VERSION_NUMBER-ubuntu.2004
+      run: docker push harrisonmeister/octolabs-workertools:$VERSION_NUMBER-ubuntu.2004
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the latest ubuntu-20.04 image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:latest-ubuntu.2004
+      run: docker push harrisonmeister/octolabs-workertools:latest-ubuntu.2004
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
     - name: Build the ubuntu-22.04 Docker image      
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker build ./ubuntu-2204 --tag octopuslabs/workertools:$VERSION_NUMBER-ubuntu.2204 --tag octopuslabs/workertools:latest-ubuntu.2204
+      run: docker build ./ubuntu-2204 --tag harrisonmeister/octolabs-workertools:$VERSION_NUMBER-ubuntu.2204 --tag harrisonmeister/octolabs-workertools:latest-ubuntu.2204
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the ubuntu-22.04 version image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:$VERSION_NUMBER-ubuntu.2204
+      run: docker push harrisonmeister/octolabs-workertools:$VERSION_NUMBER-ubuntu.2204
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the latest ubuntu-22.04 image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:latest-ubuntu.2204
+      run: docker push harrisonmeister/octolabs-workertools:latest-ubuntu.2204
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
   build-win-2019:
@@ -126,19 +126,19 @@ jobs:
     - name: Build the win2019 Docker image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker build ./windows-2019 --tag octopuslabs/workertools:${env:VERSION_NUMBER}-windows.2019 --tag octopuslabs/workertools:latest-windows.2019
+      run: docker build ./windows-2019 --tag harrisonmeister/octolabs-workertools:${env:VERSION_NUMBER}-windows.2019 --tag harrisonmeister/octolabs-workertools:latest-windows.2019
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the win2019 version image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:${env:VERSION_NUMBER}-windows.2019
+      run: docker push harrisonmeister/octolabs-workertools:${env:VERSION_NUMBER}-windows.2019
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the latest win2019 image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:latest-windows.2019
+      run: docker push harrisonmeister/octolabs-workertools:latest-windows.2019
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
   build-win-2022:
@@ -157,19 +157,19 @@ jobs:
     - name: Build the win2022 Docker image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker build ./windows-2022 --tag octopuslabs/workertools:${env:VERSION_NUMBER}-windows.2022 --tag octopuslabs/workertools:latest-windows.2022
+      run: docker build ./windows-2022 --tag harrisonmeister/octolabs-workertools:${env:VERSION_NUMBER}-windows.2022 --tag harrisonmeister/octolabs-workertools:latest-windows.2022
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the win2022 version image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:${env:VERSION_NUMBER}-windows.2022
+      run: docker push harrisonmeister/octolabs-workertools:${env:VERSION_NUMBER}-windows.2022
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push the latest win2022 image
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker push octopuslabs/workertools:latest-windows.2022
+      run: docker push harrisonmeister/octolabs-workertools:latest-windows.2022
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
   
@@ -185,25 +185,25 @@ jobs:
       run: docker login --username $USERNAME --password "$PASSWORD"
     
     - name: Create docker manifest for latest tag
-      run: docker manifest create octopuslabs/workertools:latest octopuslabs/workertools:latest-windows.2019 octopuslabs/workertools:latest-windows.2022 octopuslabs/workertools:latest-ubuntu.2004 
+      run: docker manifest create harrisonmeister/octolabs-workertools:latest harrisonmeister/octolabs-workertools:latest-windows.2019 harrisonmeister/octolabs-workertools:latest-windows.2022 harrisonmeister/octolabs-workertools:latest-ubuntu.2004 
 
     - name: Annotate docker manifest for latest tag
       env:
         WIN2019_VERSION: ${{ needs.get-version-number.outputs.WIN2019_VERSION }}
         WIN2022_VERSION: ${{ needs.get-version-number.outputs.WIN2022_VERSION }}
       run: |
-       docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "octopuslabs/workertools:latest" "octopuslabs/workertools:latest-windows.2019" \
-       docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "octopuslabs/workertools:latest" "octopuslabs/workertools:latest-windows.2022"
+       docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:latest" "harrisonmeister/octolabs-workertools:latest-windows.2019" \
+       docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:latest" "harrisonmeister/octolabs-workertools:latest-windows.2022"
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push docker manifest for latest tag
-      run: docker manifest push octopuslabs/workertools:latest
+      run: docker manifest push harrisonmeister/octolabs-workertools:latest
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Create docker manifest for version-specific tag
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}  
-      run: docker manifest create octopuslabs/workertools:$VERSION_NUMBER octopuslabs/workertools:$VERSION_NUMBER-windows.2019 octopuslabs/workertools:$VERSION_NUMBER-windows.2022 octopuslabs/workertools:$VERSION_NUMBER-ubuntu.2004
+      run: docker manifest create harrisonmeister/octolabs-workertools:$VERSION_NUMBER harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2019 harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2022 harrisonmeister/octolabs-workertools:$VERSION_NUMBER-ubuntu.2004
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
     - name: Annotate docker manifest for version-specific tag
@@ -212,12 +212,12 @@ jobs:
         WIN2019_VERSION: ${{ needs.get-version-number.outputs.WIN2019_VERSION }}
         WIN2022_VERSION: ${{ needs.get-version-number.outputs.WIN2022_VERSION }}
       run: |
-        docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "octopuslabs/workertools:$VERSION_NUMBER" "octopuslabs/workertools:$VERSION_NUMBER-windows.2019" \
-        docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "octopuslabs/workertools:$VERSION_NUMBER" "octopuslabs/workertools:$VERSION_NUMBER-windows.2022"
+        docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2019" \
+        docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2022"
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
     - name: Push docker manifest for version-specific tag
       env:
         VERSION_NUMBER: ${{ needs.get-version-number.outputs.VERSION }}
-      run: docker manifest push octopuslabs/workertools:$VERSION_NUMBER
+      run: docker manifest push harrisonmeister/octolabs-workertools:$VERSION_NUMBER
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
