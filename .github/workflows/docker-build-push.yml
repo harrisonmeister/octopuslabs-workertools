@@ -185,15 +185,15 @@ jobs:
       run: docker login --username $USERNAME --password "$PASSWORD"
     
     - name: Create docker manifest for latest tag
-      run: docker manifest create harrisonmeister/octolabs-workertools:latest harrisonmeister/octolabs-workertools:latest-windows.2019 harrisonmeister/octolabs-workertools:latest-windows.2022 harrisonmeister/octolabs-workertools:latest-ubuntu.2004 
+      run: docker manifest create harrisonmeister/octolabs-workertools:latest "harrisonmeister/octolabs-workertools:latest-windows.2019" harrisonmeister/octolabs-workertools:latest-windows.2022 harrisonmeister/octolabs-workertools:latest-ubuntu.2004 
 
     - name: Annotate docker manifest for latest tag
       env:
         WIN2019_VERSION: ${{ needs.get-version-number.outputs.WIN2019_VERSION }}
         WIN2022_VERSION: ${{ needs.get-version-number.outputs.WIN2022_VERSION }}
       run: |
-       docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:latest" "harrisonmeister/octolabs-workertools:latest-windows.2019" \
-       docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:latest" "harrisonmeister/octolabs-workertools:latest-windows.2022"
+       docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" harrisonmeister/octolabs-workertools:latest harrisonmeister/octolabs-workertools:latest-windows.2019 && \
+       docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" harrisonmeister/octolabs-workertools:latest harrisonmeister/octolabs-workertools:latest-windows.2022
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
       
     - name: Push docker manifest for latest tag
@@ -212,8 +212,8 @@ jobs:
         WIN2019_VERSION: ${{ needs.get-version-number.outputs.WIN2019_VERSION }}
         WIN2022_VERSION: ${{ needs.get-version-number.outputs.WIN2022_VERSION }}
       run: |
-        docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2019" \
-        docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER" "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2022"
+        docker manifest annotate --os "windows" --os-version "$WIN2019_VERSION" --arch "amd64" harrisonmeister/octolabs-workertools:$VERSION_NUMBER "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2019" && \
+        docker manifest annotate --os "windows" --os-version "$WIN2022_VERSION" --arch "amd64" harrisonmeister/octolabs-workertools:$VERSION_NUMBER "harrisonmeister/octolabs-workertools:$VERSION_NUMBER-windows.2022"
       if: ${{ needs.get-version-number.outputs.CONTINUE == 'Yes' }}
 
     - name: Push docker manifest for version-specific tag
